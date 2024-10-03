@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Button } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import LocationMarker from './components/LocationMarker';
@@ -74,8 +74,6 @@ const leafletHTML = `
           }
         }
 
-        updateMapFeatures(true); // By default, show outer loop route and stops
-
         window.addEventListener('message', function(event) {
           var data = JSON.parse(event.data);
           if (data.type === 'userLocation') {
@@ -92,6 +90,8 @@ const leafletHTML = `
 export default function LeafletMap() {
   const [userLocation, setUserLocation] = useState(null);
   const [showOuterLoop, setShowOuterLoop] = useState(true);
+  const [selectedNav, setSelectedNav] = useState('');
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const webViewRef = useRef(null);
   const insets = useSafeAreaInsets();
 
@@ -121,27 +121,57 @@ export default function LeafletMap() {
     }
   }, [userLocation]);
 
+  const handleNavClick = (nav) => {
+    setSelectedNav(nav);
+    setIsNavOpen(false);
+  };
+
   return (
-    <View style={[styles.container, { paddingTop: insets.top, backgroundColor: '#f0f0f0' }]}>
-      {/* Navigation Bar with Toggle Button */}
-      <View style={styles.navBar}>
-        
-        <Button
-          title={showOuterLoop ? "Hide Outer Loop" : "Show Outer Loop"}
-          onPress={toggleOuterLoop}
-          style={styles.navButton}
-        />
-      </View>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      {/* Hamburger Menu */}
+      <TouchableOpacity
+        style={styles.hamburgerMenu}
+        onPress={() => setIsNavOpen(!isNavOpen)}
+      >
+        <Text style={styles.hamburgerIcon}>☰</Text>
+      </TouchableOpacity>
+
+      {/* Side Navigation */}
+      {isNavOpen && (
+        <View style={styles.sideNav}>
+          <TouchableOpacity onPress={() => handleNavClick('SBU Bikes')}>
+            <Text style={styles.navButton}>SBU Bikes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleNavClick('DoubleMap')}>
+            <Text style={styles.navButton}>DoubleMap</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleNavClick('Nutrislice')}>
+            <Text style={styles.navButton}>Nutrislice</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* Map View */}
       <WebView
         ref={webViewRef}
         originWhitelist={['*']}
         source={{ html: leafletHTML }}
-        style={[styles.map, { borderTopLeftRadius: 20, borderTopRightRadius: 20 }]}
+        style={styles.map}
         onLoad={sendLocationToWebView}
         javaScriptEnabled={true}
       />
+
+      {/* Outer Loop Button */}
+      {selectedNav === 'DoubleMap' && (
+        <TouchableOpacity
+          style={styles.outerLoopButton}
+          onPress={toggleOuterLoop}
+        >
+          <Text style={styles.outerLoopButtonText}>
+            {showOuterLoop ? 'Hide Outer Loop' : 'Show Outer Loop'}
+          </Text>
+        </TouchableOpacity>
+      )}
 
       {/* User Location Marker */}
       <LocationMarker onLocationChange={setUserLocation} />
