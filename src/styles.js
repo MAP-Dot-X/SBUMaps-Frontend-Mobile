@@ -13,7 +13,7 @@ export default StyleSheet.create({
   hamburgerMenu: {
     position: 'absolute',
     top: 70,
-    left: 20,
+    right: 20,
     zIndex: 1000,
     backgroundColor: 'white',
     borderRadius: 4,
@@ -30,7 +30,7 @@ export default StyleSheet.create({
   sideNav: {
     position: 'absolute',
     top: 120,
-    left: 20,
+    right: 20,
     zIndex: 1000,
     backgroundColor: 'white',
     borderRadius: 4,
@@ -45,23 +45,5 @@ export default StyleSheet.create({
     fontSize: 16,
     padding: 5,
     color: 'black',
-  },
-  outerLoopButton: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    zIndex: 1000,
-    backgroundColor: 'white',
-    borderRadius: 4,
-    padding: 10,
-    elevation: 5,
-    shadowColor: 'black',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-  },
-  outerLoopButtonText: {
-    fontSize: 16,
-    color: 'black',
-  },
+  }
 });

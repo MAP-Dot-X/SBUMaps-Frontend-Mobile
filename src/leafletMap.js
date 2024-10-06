@@ -3,93 +3,16 @@ import { View, TouchableOpacity, Text } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import LocationMarker from './components/LocationMarker';
+
 import styles from './styles';
-
-// Import Outer Loop Route data
-import { outerLoopRouteCoordinates, outerLoopBusStops } from './utils/outerLoopRoute';
-
-const leafletHTML = `
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-      <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-      <style>
-        #map {
-          height: 100%; 
-          width: 100%; 
-          margin: 0; 
-          position: relative; 
-          overflow: hidden;
-          border-top-left-radius: 20px;
-          border-top-right-radius: 20px;
-        }
-        body, html { 
-          height: 100%; 
-          margin: 0; 
-          padding: 0; 
-          overflow: hidden; 
-        }
-        .leaflet-control-container { 
-          overflow: visible; 
-          z-index: 1000; 
-        }
-      </style>
-    </head>
-    <body>
-      <div id="map"></div>
-      <script>
-        var map = L.map('map', { zoomControl: false }).setView([40.9126, -73.1234], 15);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        L.control.zoom({ position: 'topright' }).addTo(map);
-
-        var userMarker, busRoutePolyline, busStopMarkers = [];
-
-        function updateUserLocation(lat, lng) {
-          if (userMarker) {
-            map.removeLayer(userMarker);
-          }
-          userMarker = L.marker([lat, lng]).addTo(map)
-            .bindPopup('You are here')
-            .openPopup();
-          map.setView([lat, lng], 15);
-        }
-
-        function updateMapFeatures(showOuterLoop) {
-          if (busRoutePolyline) map.removeLayer(busRoutePolyline);
-          busStopMarkers.forEach(marker => map.removeLayer(marker));
-          busStopMarkers = [];
-
-          if (showOuterLoop) {
-            busRoutePolyline = L.polyline(${JSON.stringify(outerLoopRouteCoordinates)}, {color: 'green', weight: 3}).addTo(map);
-            ${JSON.stringify(outerLoopBusStops)}.forEach(stop => {
-              var marker = L.marker(stop.position).addTo(map);
-              marker.bindPopup(stop.name);
-              busStopMarkers.push(marker);
-            });
-          }
-        }
-
-        window.addEventListener('message', function(event) {
-          var data = JSON.parse(event.data);
-          if (data.type === 'userLocation') {
-            updateUserLocation(data.latitude, data.longitude);
-          } else if (data.type === 'toggleOuterLoop') {
-            updateMapFeatures(data.showOuterLoop);
-          }
-        });
-      </script>
-    </body>
-  </html>
-`;
+import { leafletHTML } from './utils/mapSetup';
 
 export default function LeafletMap() {
   const [userLocation, setUserLocation] = useState(null);
-  const [showOuterLoop, setShowOuterLoop] = useState(true);
+  const [showOuterLoop, setShowOuterLoop] = useState(false);
+  const [showInnerLoop, setShowInnerLoop] = useState(false);
+  const [showHospital, setShowHospital] = useState(false);
+  const [showBikeShare, setShowBikeShare] = useState(false);
   const [selectedNav, setSelectedNav] = useState('');
   const [isNavOpen, setIsNavOpen] = useState(false);
   const webViewRef = useRef(null);
@@ -106,11 +29,13 @@ export default function LeafletMap() {
     }
   };
 
-  const toggleOuterLoop = () => {
-    setShowOuterLoop(prev => !prev);
+  const toggleFeatures = () => {
     const message = JSON.stringify({
-      type: 'toggleOuterLoop',
-      showOuterLoop: !showOuterLoop,
+      type: 'toggleFeatures',
+      showOuter: showOuterLoop,
+      showInner: showInnerLoop,
+      showHospital: showHospital,
+      showBikeShare: showBikeShare,
     });
     webViewRef.current.postMessage(message);
   };
@@ -119,12 +44,32 @@ export default function LeafletMap() {
     if (userLocation) {
       sendLocationToWebView();
     }
-  }, [userLocation]);
+    toggleFeatures();
+  }, [userLocation, showOuterLoop, showInnerLoop, showHospital, showBikeShare]);
+  
 
   const handleNavClick = (nav) => {
     setSelectedNav(nav);
     setIsNavOpen(false);
+    // Reset feature visibility based on navigation selection
+    if (nav === 'DoubleMap') {
+      setShowOuterLoop(true);
+      setShowInnerLoop(true);
+      setShowHospital(true);
+      setShowBikeShare(false);
+    } else if (nav === 'SBU Bikes') {
+      setShowOuterLoop(false);
+      setShowInnerLoop(false);
+      setShowHospital(false);
+      setShowBikeShare(true);
+    } else if (nav === 'Nutrislice') {
+      setShowOuterLoop(false);
+      setShowInnerLoop(false);
+      setShowHospital(false);
+      setShowBikeShare(false); 
+    }
   };
+
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -151,7 +96,22 @@ export default function LeafletMap() {
         </View>
       )}
 
-      {/* Map View */}
+      {/* Toggle Options */}
+      <View style={styles.toggleContainer}>
+        <TouchableOpacity onPress={() => setShowOuterLoop(prev => !prev)}>
+          <Text style={styles.toggleLabel}>{showOuterLoop ? 'Hide Outer Loop' : 'Show Outer Loop'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setShowInnerLoop(prev => !prev)}>
+          <Text style={styles.toggleLabel}>{showInnerLoop ? 'Hide Inner Loop' : 'Show Inner Loop'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setShowHospital(prev => !prev)}>
+          <Text style={styles.toggleLabel}>{showHospital ? 'Hide Hospital Route' : 'Show Hospital Route'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setShowBikeShare(prev => !prev)}>
+          <Text style={styles.toggleLabel}>{showBikeShare ? 'Hide Bike Share' : 'Show Bike Share'}</Text>
+        </TouchableOpacity>
+      </View>
+
       <WebView
         ref={webViewRef}
         originWhitelist={['*']}
@@ -159,22 +119,14 @@ export default function LeafletMap() {
         style={styles.map}
         onLoad={sendLocationToWebView}
         javaScriptEnabled={true}
+        onMessage={(event) => {
+          const data = JSON.parse(event.nativeEvent.data);
+          if (data.type === 'userLocation') {
+            setUserLocation({ latitude: data.latitude, longitude: data.longitude });
+          }
+        }}
       />
-
-      {/* Outer Loop Button */}
-      {selectedNav === 'DoubleMap' && (
-        <TouchableOpacity
-          style={styles.outerLoopButton}
-          onPress={toggleOuterLoop}
-        >
-          <Text style={styles.outerLoopButtonText}>
-            {showOuterLoop ? 'Hide Outer Loop' : 'Show Outer Loop'}
-          </Text>
-        </TouchableOpacity>
-      )}
-
-      {/* User Location Marker */}
-      <LocationMarker onLocationChange={setUserLocation} />
+            <LocationMarker onLocationChange={setUserLocation} />
     </View>
   );
 }
