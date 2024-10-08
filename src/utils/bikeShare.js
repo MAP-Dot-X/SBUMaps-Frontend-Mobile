@@ -9,10 +9,8 @@ export const bikeShareStations = [
     { position: [40.913437, -73.121420], name: "Javits Station" },
     { position: [40.914413, -73.124657], name: "SAC Station" },
     { position: [40.916109, -73.1234889], name: "Library Station" },
-
-    { position: [40.910048, -73.124839], name: "Tabler Quad Station" },
-    { position: [40.910048, -73.124839], name: "Tabler Quad Station" },
-    { position: [40.910048, -73.124839], name: "Tabler Quad Station" },
-    { position: [40.910048, -73.124839], name: "Tabler Quad Station" },
-    { position: [40.910048, -73.124839], name: "Tabler Quad Station" },
+    { position: [40.916441, -73.118270], name: "Wang Center Station" },
+    { position: [40.919185, -73.120839], name: "James Hall Station" },
+    { position: [40.920057, -73.128236], name: "LIRR Station" },
+    { position: [40.921497, -73.126662], name: "Athletic Fields Station" },
   ];

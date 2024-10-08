@@ -163,22 +163,10 @@ export const outerLoopBusStops = [
   { position: [40.920519896659734, -73.1184852120179], name: "Benedict" },
   { position: [40.91905903248162, -73.12118400086071], name: "H Quad" },
   { position: [40.918211992558476, -73.11814033017524], name: "M & H" },
-  {
-    position: [40.91413449887355, -73.11921606483818],
-    name: "Administration Building",
-  },
-  {
-    position: [40.91096382303363, -73.11916865510916],
-    name: "Life Sciences West",
-  },
-  {
-    position: [40.91037848484324, -73.12411675994503],
-    name: "Roth/Tabler East",
-  },
-  {
-    position: [40.91105340881635, -73.12595430963177],
-    name: "Tabler Steps East",
-  },
+  { position: [40.91413449887355, -73.11921606483818], name: "Administration Building" },
+  { position: [40.91096382303363, -73.11916865510916], name: "Life Sciences West" },
+  { position: [40.91037848484324, -73.12411675994503], name: "Roth/Tabler East" },
+  { position: [40.91105340881635, -73.12595430963177], name: "Tabler Steps East" },
   { position: [40.91191488425261, -73.12762118320369], name: "Roosevelt East" },
   { position: [40.91113456483082, -73.13132060361556], name: "Greeley" },
   { position: [40.91178912213096, -73.1344340068163], name: "West E" },
