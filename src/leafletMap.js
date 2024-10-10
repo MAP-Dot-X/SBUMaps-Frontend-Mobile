@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, Animated } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import LocationMarker from './components/LocationMarker';
@@ -15,6 +15,8 @@ export default function LeafletMap() {
   const [showBikeShare, setShowBikeShare] = useState(false);
   const [selectedNav, setSelectedNav] = useState('');
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const navAnim = useRef(new Animated.Value(500)).current;  // Slide menu off-screen initially
+  const mapAnim = useRef(new Animated.Value(0)).current;   // Map starts at its original position
   const webViewRef = useRef(null);
   const insets = useSafeAreaInsets();
 
@@ -46,12 +48,12 @@ export default function LeafletMap() {
     }
     toggleFeatures();
   }, [userLocation, showOuterLoop, showInnerLoop, showHospital, showBikeShare]);
-  
 
+  //  navigation between map categories
   const handleNavClick = (nav) => {
     setSelectedNav(nav);
     setIsNavOpen(false);
-    // Reset feature visibility based on navigation selection
+
     if (nav === 'DoubleMap') {
       setShowOuterLoop(true);
       setShowInnerLoop(true);
@@ -66,67 +68,90 @@ export default function LeafletMap() {
       setShowOuterLoop(false);
       setShowInnerLoop(false);
       setShowHospital(false);
-      setShowBikeShare(false); 
+      setShowBikeShare(false);
     }
   };
 
+  // Handle sliding animation for navigation menu and map
+  const toggleNav = () => {
+    if (isNavOpen) {
+      Animated.parallel([
+        Animated.timing(navAnim, {
+          toValue: 500,  // Slide nav off-screen
+          duration: 350,
+          useNativeDriver: true,
+        }),
+        Animated.timing(mapAnim, {
+          toValue: 0,  // Move map back to original position
+          duration: 350,
+          useNativeDriver: true,
+        }),
+      ]).start(() => setIsNavOpen(false));
+    } else {
+      setIsNavOpen(true);
+      Animated.parallel([
+        Animated.timing(navAnim, {
+          toValue: 0,  // Slide nav into view
+          duration: 350,
+          useNativeDriver: true,
+        }),
+        Animated.timing(mapAnim, {
+          toValue: -200,  // Move map to the side
+          duration: 350,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  };
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      {/* Hamburger Menu */}
-      <TouchableOpacity
-        style={styles.hamburgerMenu}
-        onPress={() => setIsNavOpen(!isNavOpen)}
-      >
-        <Text style={styles.hamburgerIcon}>☰</Text>
-      </TouchableOpacity>
+    <View style={[styles.container]}>
+      {/* Hamburger Menu for toggling navigation */}
+      <Animated.View style={[styles.hamburgerMenu, { transform: [{ translateX: mapAnim }] }]}>
+        <TouchableOpacity onPress={toggleNav}>
+          <Text style={styles.hamburgerIcon}>☰</Text>
+        </TouchableOpacity>
+      </Animated.View>
 
-      {/* Side Navigation */}
-      {isNavOpen && (
-        <View style={styles.sideNav}>
-          <TouchableOpacity onPress={() => handleNavClick('SBU Bikes')}>
-            <Text style={styles.navButton}>SBU Bikes</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleNavClick('DoubleMap')}>
-            <Text style={styles.navButton}>DoubleMap</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleNavClick('Nutrislice')}>
-            <Text style={styles.navButton}>Nutrislice</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      {/* Side Navigation Menu */}
+      <Animated.View style={[
+        styles.sideNav,
+        { transform: [{ translateX: navAnim }] }
+      ]}>
+        <TouchableOpacity onPress={() => handleNavClick('SBU Bikes')}>
+          <Text style={styles.navButton}>SBU Bikes</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleNavClick('DoubleMap')}>
+          <Text style={styles.navButton}>DoubleMap</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleNavClick('Nutrislice')}>
+          <Text style={styles.navButton}>Nutrislice</Text>
+        </TouchableOpacity>
+      </Animated.View>
 
-      {/* Toggle Options */}
-      <View style={styles.toggleContainer}>
-        <TouchableOpacity onPress={() => setShowOuterLoop(prev => !prev)}>
-          <Text style={styles.toggleLabel}>{showOuterLoop ? 'Hide Outer Loop' : 'Show Outer Loop'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setShowInnerLoop(prev => !prev)}>
-          <Text style={styles.toggleLabel}>{showInnerLoop ? 'Hide Inner Loop' : 'Show Inner Loop'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setShowHospital(prev => !prev)}>
-          <Text style={styles.toggleLabel}>{showHospital ? 'Hide Hospital Route' : 'Show Hospital Route'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setShowBikeShare(prev => !prev)}>
-          <Text style={styles.toggleLabel}>{showBikeShare ? 'Hide Bike Share' : 'Show Bike Share'}</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Animated Container for the Map */}
+      <Animated.View style={{ flex: 1, transform: [{ translateX: mapAnim }] }}>
+        <WebView
+          ref={webViewRef}
+          originWhitelist={['*']}
+          source={{ html: leafletHTML }}
+          style={styles.map}
+          onLoad={sendLocationToWebView}
+          javaScriptEnabled={true}
+          onMessage={(event) => {
+            const data = JSON.parse(event.nativeEvent.data);
+            if (data.type === 'userLocation') {
+              setUserLocation({
+                latitude: data.latitude,
+                longitude: data.longitude,
+              });
+            }
+          }}
+        />
+      </Animated.View>
 
-      <WebView
-        ref={webViewRef}
-        originWhitelist={['*']}
-        source={{ html: leafletHTML }}
-        style={styles.map}
-        onLoad={sendLocationToWebView}
-        javaScriptEnabled={true}
-        onMessage={(event) => {
-          const data = JSON.parse(event.nativeEvent.data);
-          if (data.type === 'userLocation') {
-            setUserLocation({ latitude: data.latitude, longitude: data.longitude });
-          }
-        }}
-      />
-            <LocationMarker onLocationChange={setUserLocation} />
+      {/* Location Marker */}
+      <LocationMarker onLocationChange={setUserLocation} />
     </View>
   );
 }

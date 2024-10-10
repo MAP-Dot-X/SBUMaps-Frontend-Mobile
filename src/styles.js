@@ -30,8 +30,27 @@ export default StyleSheet.create({
   sideNav: {
     position: 'absolute',
     top: 120,
-    right: 20,
+    right: 0,
+    width: 200,
+    height: '100%',
+    backgroundColor: 'white',
+    borderLeftWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    padding: 20,
+    elevation: 5,
     zIndex: 1000,
+  },  
+  navButton: {
+    fontSize: 16,
+    padding: 5,
+    color: 'black',
+  },
+  toggleContainer: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    flexDirection: 'row',
     backgroundColor: 'white',
     borderRadius: 4,
     padding: 10,
@@ -41,9 +60,4 @@ export default StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
-  navButton: {
-    fontSize: 16,
-    padding: 5,
-    color: 'black',
-  }
 });

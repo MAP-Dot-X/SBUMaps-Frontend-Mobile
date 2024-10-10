@@ -17,8 +17,6 @@ const leafletHTML = `
           margin: 0; 
           position: relative; 
           overflow: hidden;
-          border-top-left-radius: 20px;
-          border-top-right-radius: 20px;
         }
         body, html { 
           height: 100%; 
@@ -75,6 +73,10 @@ const leafletHTML = `
         var map = L.map('map', { zoomControl: false }).setView([40.9126, -73.1234], 15);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
         L.control.zoom({ position: 'topleft' }).addTo(map);
+        var zoomControl = document.querySelector('.leaflet-control-zoom');
+        zoomControl.style.position = 'absolute';
+        zoomControl.style.top = '58px';
+        zoomControl.style.left = '10px';
 
         // Initialize map features
         var userMarker, outerLoopPolyline, innerLoopPolyline, hospitalPolyline;
