@@ -49,7 +49,7 @@ export default function LeafletMap() {
     toggleFeatures();
   }, [userLocation, showOuterLoop, showInnerLoop, showHospital, showBikeShare]);
 
-  //  navigation between map categories
+  // Navigation between map categories
   const handleNavClick = (nav) => {
     setSelectedNav(nav);
     setIsNavOpen(false);
