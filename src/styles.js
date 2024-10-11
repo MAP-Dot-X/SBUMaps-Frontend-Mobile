@@ -25,7 +25,7 @@ export default StyleSheet.create({
     shadowRadius: 4,
   },
   hamburgerIcon: {
-    fontSize: 28,
+    fontSize: 34,
   },
   sideNav: {
     position: 'absolute',
@@ -41,7 +41,7 @@ export default StyleSheet.create({
     zIndex: 1000,
   },  
   navButton: {
-    fontSize: 16,
+    fontSize: 18,
     padding: 5,
     color: 'black',
   },
