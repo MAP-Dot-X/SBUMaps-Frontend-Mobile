@@ -1,6 +1,10 @@
-import { outerLoopRouteCoordinates, outerLoopBusStops } from './busData/outerLoopRoute';
-import { innerLoopRouteCoordinates, innerLoopBusStops } from './busData/innerLoopRoute';
-import { hospitalRouteCoordinates, hospitalBusStops } from './busData/hospitalLoopRoute';
+import { expressEastRouteCoordinates, expressEastBusStops } from './busData/expressEastData';
+import { expressWestRouteCoordinates, expressWestBusStops } from './busData/expressWestData';
+import { hospitalExpressLoopRouteCoordinates, hospitalExpressLoopBusStops } from './busData/hospitalExpressData';
+import { hospitalRouteCoordinates, hospitalBusStops } from './busData/hospitalLoopData';
+import { innerLoopRouteCoordinates, innerLoopBusStops } from './busData/innerLoopData';
+import { outerLoopRouteCoordinates, outerLoopBusStops } from './busData/outerLoopData';
+import { railroadRouteCoordinates, railroadBusStops } from './busData/railroadLoopData';
 import { bikeShareStations } from './bikeData/bikeShare';
 
 const leafletHTML = `
@@ -37,9 +41,40 @@ const leafletHTML = `
       <script>
 
         // Create marker icons
-        var outerStopIcon= new L.Icon({ 
+        var expressEastStopIcon = new L.Icon({
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41] 
+        });
+
+        var expressWestStopIcon = new L.Icon({
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41],
+        });
+
+        var hospitalExpressStopIcon = new L.Icon({
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41],
+        });
+
+        var hospitalRouteStopIcon = new L.Icon({
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41],
+        });
+
+        var outerStopIcon = new L.Icon({ 
           iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png', 
-          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png', 
           iconSize: [25, 41], 
           iconAnchor: [12, 41], 
           popupAnchor: [1, -34], 
@@ -47,15 +82,6 @@ const leafletHTML = `
 
         var innerStopIcon = new L.Icon({ 
           iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png', 
-          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png', 
-          iconSize: [25, 41], 
-          iconAnchor: [12, 41], 
-          popupAnchor: [1, -34], 
-          shadowSize: [30, 30] });
-
-        var hospitalStopIcon= new L.Icon({ 
-          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-purple.png', 
-          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png', 
           iconSize: [25, 41], 
           iconAnchor: [12, 41], 
           popupAnchor: [1, -34], 
@@ -63,7 +89,6 @@ const leafletHTML = `
 
         var redIcon = new L.Icon({ 
           iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png', 
-          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png', 
           iconSize: [25, 41], 
           iconAnchor: [12, 41], 
           popupAnchor: [1, -34], 
@@ -74,8 +99,9 @@ const leafletHTML = `
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
 
         // Initialize map features
-        var userMarker, outerLoopPolyline, innerLoopPolyline, hospitalPolyline;
-        var outerStopMarkers = [], innerStopMarkers = [], hospitalStopMarkers = [], bikeShareMarkers = [];
+        var userMarker, expressEastPolyline, expressWestPolyline, hospitalExpressPolyline, outerPolyLine, innerPolyLine, hospitalPolyline, railroadPolyline;
+        var expressEastStopMarkers = [], expressWestStopMarkers = [], hospitalExpressStopMarkers = [], outerStopMarkers = [], innerStopMarkers = [], 
+            hospitalStopMarkers = [], railroadStopMarkers = [], bikeShareMarkers = [];
 
         // Function to update user location
         function updateUserLocation(lat, lng) {
@@ -85,20 +111,33 @@ const leafletHTML = `
         }
 
         // Function to show map features
-        function updateMapFeatures(showOuter, showInner, showHospital, showBikeShare) {
+        function updateMapFeatures(showExpressEast, showExpressWest, showHospitalExpress, showOuter, showInner, showHospital, showRailroad, showBikeShare) {
           // Clear existing layers
-          if (outerLoopPolyline) map.removeLayer(outerLoopPolyline);
-          if (innerLoopPolyline) map.removeLayer(innerLoopPolyline);
+          if (expressEastPolyline) map.removeLayer(expressEastPolyline);
+          if (expressWestPolyline) map.removeLayer(expressWestPolyline);
+          if (hospitalExpressPolyline) map.removeLayer(hospitalExpressPolyline);
+          if (outerPolyLine) map.removeLayer(outerPolyLine);
+          if (innerPolyLine) map.removeLayer(innerPolyLine);
           if (hospitalPolyline) map.removeLayer(hospitalPolyline);
+          if (railroadPolyline) map.removeLayer(railroadPolyline);
           
+          expressEastStopMarkers.forEach(marker => map.removeLayer(marker));
+          expressWestStopMarkers.forEach(marker => map.removeLayer(marker));
+          hospitalExpressStopMarkers.forEach(marker => map.removeLayer(marker));
           outerStopMarkers.forEach(marker => map.removeLayer(marker));
           innerStopMarkers.forEach(marker => map.removeLayer(marker));
           hospitalStopMarkers.forEach(marker => map.removeLayer(marker));
+          railroadStopMarkers.forEach(marker => map.removeLayer(marker));
           bikeShareMarkers.forEach(marker => map.removeLayer(marker));
 
+          // Clear existing layers
+          expressEastStopMarkers = [];
+          expressWestStopMarkers = [];
+          hospitalExpressStopMarkers = [];
           outerStopMarkers = [];
           innerStopMarkers = [];
           hospitalStopMarkers = [];
+          railroadStopMarkers = [];
           bikeShareMarkers = [];
 
 
@@ -111,9 +150,40 @@ const leafletHTML = `
             });
           }
 
+
+          // Add express east route
+          if (showExpressEast) {
+            expressEastPolyline = L.polyline(${JSON.stringify(expressEastRouteCoordinates)}, {color: 'blue', weight: 3}).addTo(map);
+            ${JSON.stringify(expressEastBusStops)}.forEach(stop => {
+              var marker = L.marker(stop.position, { icon: expressEastStopIcon }).addTo(map);
+              marker.bindPopup(stop.name);
+              expressEastStopMarkers.push(marker);
+            });
+          }
+
+          // Add express west route
+          if (showExpressWest) {
+            expressWestPolyline = L.polyline(${JSON.stringify(expressWestRouteCoordinates)}, {color: 'red', weight: 3}).addTo(map);
+            ${JSON.stringify(expressWestBusStops)}.forEach(stop => {
+              var marker = L.marker(stop.position, { icon: expressWestStopIcon }).addTo(map);
+              marker.bindPopup(stop.name);
+              expressWestStopMarkers.push(marker);
+            });
+          }
+
+          // Add hospital express route
+          if (showHospitalExpress) {
+            hospitalExpressPolyline = L.polyline(${JSON.stringify(hospitalExpressLoopRouteCoordinates)}, {color: 'violet', weight: 3}).addTo(map);
+            ${JSON.stringify(hospitalExpressLoopBusStops)}.forEach(stop => {
+              var marker = L.marker(stop.position, { icon: hospitalExpressStopIcon }).addTo(map);
+              marker.bindPopup(stop.name);
+              hospitalExpressStopMarkers.push(marker);
+            });
+          }
+
           // Add outer loop
           if (showOuter) {
-            outerLoopPolyline = L.polyline(${JSON.stringify(outerLoopRouteCoordinates)}, {color: 'green', weight: 3}).addTo(map);
+            outerPolyLine = L.polyline(${JSON.stringify(outerLoopRouteCoordinates)}, {color: 'green', weight: 3}).addTo(map);
             ${JSON.stringify(outerLoopBusStops)}.forEach(stop => {
               var marker = L.marker(stop.position, { icon: outerStopIcon}).addTo(map);
               marker.bindPopup(stop.name);
@@ -123,7 +193,7 @@ const leafletHTML = `
 
           // Add inner loop
           if (showInner) {
-            innerLoopPolyline = L.polyline(${JSON.stringify(innerLoopRouteCoordinates)}, {color: 'orange', weight: 3}).addTo(map);
+            innerPolyLine = L.polyline(${JSON.stringify(innerLoopRouteCoordinates)}, {color: 'orange', weight: 3}).addTo(map);
             ${JSON.stringify(innerLoopBusStops)}.forEach(stop => {
               var marker = L.marker(stop.position, { icon: innerStopIcon }).addTo(map);
               marker.bindPopup(stop.name);
@@ -140,6 +210,16 @@ const leafletHTML = `
               hospitalStopMarkers.push(marker);
             });
           }
+
+          // Add railroad loop
+          if (showRailroad) {
+            railroadPolyline = L.polyline(${JSON.stringify(railroadRouteCoordinates)}, {color: 'black', weight: 3}).addTo(map);
+            ${JSON.stringify(railroadBusStops)}.forEach(stop => {
+              var marker = L.marker(stop.position, { icon: redIcon }).addTo(map);
+              marker.bindPopup(stop.name);
+              railroadStopMarkers.push(marker);
+            });
+          }
         }
 
         window.addEventListener('message', function(event) {
@@ -147,7 +227,8 @@ const leafletHTML = `
           if (data.type === 'userLocation') {
             updateUserLocation(data.latitude, data.longitude);
           } else if (data.type === 'toggleFeatures') {
-            updateMapFeatures(data.showOuter, data.showInner, data.showHospital, data.showBikeShare);
+            updateMapFeatures(data.showExpressEast, data.showExpressWest, data.showHospitalExpress, 
+                              data.showOuter, data.showInner, data.showHospital, data.showRailroad, data.showBikeShare);
           }
         });
       </script>

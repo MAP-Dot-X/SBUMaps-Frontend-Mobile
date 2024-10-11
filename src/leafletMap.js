@@ -9,9 +9,14 @@ import { leafletHTML } from './utils/mapSetup';
 
 export default function LeafletMap() {
   const [userLocation, setUserLocation] = useState(null);
-  const [showOuterLoop, setShowOuterLoop] = useState(false);
-  const [showInnerLoop, setShowInnerLoop] = useState(false);
+  const [showExpressEast, setShowExpressEast] = useState(false);
+  const [showExpressWest, setShowExpressWest] = useState(false);
+  const [showHospitalExpress, setShowHospitalExpress] = useState(false);
   const [showHospital, setShowHospital] = useState(false);
+  const [showInnerLoop, setShowInnerLoop] = useState(false);
+  const [showOuterLoop, setShowOuterLoop] = useState(false);
+  const [showRailroad, setShowRailroad ] = useState(false);
+
   const [showBikeShare, setShowBikeShare] = useState(false);
   const [selectedNav, setSelectedNav] = useState('');
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -35,9 +40,13 @@ export default function LeafletMap() {
   const toggleFeatures = () => {
     const message = JSON.stringify({
       type: 'toggleFeatures',
-      showOuter: showOuterLoop,
-      showInner: showInnerLoop,
+      showExpressEast: showExpressEast,
+      showExpressWest: showExpressWest,
+      showHospitalExpress: showHospitalExpress,
       showHospital: showHospital,
+      showInner: showInnerLoop,
+      showOuter: showOuterLoop,
+      showRailroad: showRailroad,
       showBikeShare: showBikeShare,
     });
     webViewRef.current.postMessage(message);
@@ -48,7 +57,8 @@ export default function LeafletMap() {
       sendLocationToWebView();
     }
     toggleFeatures();
-  }, [userLocation, showOuterLoop, showInnerLoop, showHospital, showBikeShare]);
+  }, [userLocation, showExpressEast, showExpressWest, showHospitalExpress, showOuterLoop, 
+      showInnerLoop, showHospital, showRailroad, showBikeShare]);
 
   // Navigation between map categories
   const handleNavClick = (nav) => {
@@ -56,19 +66,31 @@ export default function LeafletMap() {
     setIsNavOpen(false);
 
     if (nav === 'DoubleMap') {
+      setShowExpressEast(true);
+      setShowExpressWest(true);
+      setShowHospitalExpress(true);
+      setShowHospital(true);
       setShowOuterLoop(true);
       setShowInnerLoop(true);
-      setShowHospital(true);
+      setShowRailroad(true);
       setShowBikeShare(false);
     } else if (nav === 'SBU Bikes') {
+      setShowExpressEast(false);
+      setShowExpressWest(false);
+      setShowHospitalExpress(false);
+      setShowHospital(false);
       setShowOuterLoop(false);
       setShowInnerLoop(false);
-      setShowHospital(false);
+      setShowRailroad(false);
       setShowBikeShare(true);
     } else if (nav === 'Nutrislice') {
+      setShowExpressEast(false);
+      setShowExpressWest(false);
+      setShowHospitalExpress(false);
+      setShowHospital(false);
       setShowOuterLoop(false);
       setShowInnerLoop(false);
-      setShowHospital(false);
+      setShowRailroad(false);
       setShowBikeShare(false);
     }
   };
