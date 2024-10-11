@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TouchableOpacity, Text, Animated } from 'react-native';
+import { View, TouchableOpacity, Text, Animated, StatusBar } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import LocationMarker from './components/LocationMarker';
-
 import styles from './styles';
 import { leafletHTML } from './utils/mapSetup';
 
@@ -20,6 +20,7 @@ export default function LeafletMap() {
   const webViewRef = useRef(null);
   const insets = useSafeAreaInsets();
 
+  // Functions for sending messages to the WebView and toggling map features
   const sendLocationToWebView = () => {
     if (userLocation && webViewRef.current) {
       const message = JSON.stringify({
@@ -106,6 +107,7 @@ export default function LeafletMap() {
 
   return (
     <View style={[styles.container]}>
+      <StatusBar barStyle="dark-content" translucent />
       {/* Hamburger Menu for toggling navigation */}
       <Animated.View style={[styles.hamburgerMenu, { transform: [{ translateX: mapAnim }] }]}>
         <TouchableOpacity onPress={toggleNav}>
