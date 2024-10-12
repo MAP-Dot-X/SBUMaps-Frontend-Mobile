@@ -1,4 +1,4 @@
-export const innerLoopRouteCoordinates = [
+export const innerRouteCoordinates = [
   [40.91416, -73.12469],
   [40.9142, -73.12469],
   [40.9143, -73.12476],
@@ -109,7 +109,7 @@ export const innerLoopRouteCoordinates = [
   [40.91416, -73.12469],
 ];
 
-  export const innerLoopBusStops = [
+  export const innerBusStops = [
     { name: 'SAC', position: [40.91433772861805, -73.12511875221158] },
     { name: 'Lot 13', position: [40.91367016061309, -73.128498901435] },
     { name: 'Roosevelt West', position: [40.91202250727283, -73.12804710194747] },

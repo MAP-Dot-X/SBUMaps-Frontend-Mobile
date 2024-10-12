@@ -1,4 +1,4 @@
-export const outerLoopRouteCoordinates = [
+export const outerRouteCoordinates = [
   [40.91429178126743, -73.12473791877228], // SAC
   [40.914346, -73.124831],
   [40.914365, -73.124982],
@@ -154,7 +154,7 @@ export const outerLoopRouteCoordinates = [
   [40.91429178126743, -73.12473791877228], // SAC
 ];
 
-export const outerLoopBusStops = [
+export const outerBusStops = [
   { name: "SAC", position: [40.91429178126743, -73.12473791877228] },
   { name: "Kelly", position: [40.9134150835656, -73.12918902436843] },
   { name: "Gym Road East", position: [40.91805457231416, -73.12942010636748] },

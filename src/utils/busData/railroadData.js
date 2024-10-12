@@ -1,4 +1,4 @@
-export const railroadLoopRouteCoordinates = [
+export const railroadRouteCoordinates = [
   [40.92139, -73.12741],
   [40.92119, -73.12757],
   [40.92109, -73.12733],
@@ -89,7 +89,7 @@ export const railroadLoopRouteCoordinates = [
   [40.92141, -73.12738],
 ];
 
-export const railroadLoopBusStops = [
+export const railroadBusStops = [
   { name: 'LIRR', position: [40.92137844846457, -73.12751511809915] },
   { name: 'Gym Road West', position: [40.91848425396323, -73.12933807899793] },
   { name: 'Hamiliton', position: [40.913634058073946, -73.12984054833946] },

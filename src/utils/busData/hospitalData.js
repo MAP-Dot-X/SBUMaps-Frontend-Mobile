@@ -1,4 +1,4 @@
-export const hospitalLoopRouteCoordinates = [
+export const hospitalRouteCoordinates = [
   [40.91417, -73.12472], [40.91416, -73.12469], [40.9142, -73.12469], 
   [40.9143, -73.12476], [40.91434, -73.12484], [40.91436, -73.12493], 
   [40.91435, -73.12502], [40.91433, -73.12509], [40.9143, -73.12514], 
@@ -69,7 +69,7 @@ export const hospitalLoopRouteCoordinates = [
   [40.91402, -73.12476], [40.91409, -73.1247], [40.91416, -73.12469]
   ];
   
-  export const hospitalLoopBusStops = [
+  export const hospitalBusStops = [
     { name: 'SAC', position: [40.91401431367258, -73.12468099152272] },
     { name: 'Roosevelt West', position: [40.91202250727283, -73.12804710194747] },
     { name: 'Tabler Steps West', position: [40.911084504927956, -73.12646123513507] },

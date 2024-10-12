@@ -1,5 +1,4 @@
-export const expressWestCoordinates = [
-
+export const expressWestRouteCoordinates = [
   [40.896782, -73.126642],
   [40.8969, -73.12602],
   [40.89702, -73.12529],

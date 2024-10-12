@@ -56,43 +56,42 @@ export default function LeafletMap() {
       sendLocationToWebView();
     }
     toggleFeatures();
-  }, [userLocation, showExpressEast, showExpressWest, showHospitalExpress, showOuter, 
-      showInner, showHospital, showRailroad, showBikeShare]);
+  }, [userLocation, showExpressEast, showExpressWest, showHospitalExpress, showHospital, showInner, showOuter, showRailroad, showBikeShare]);
 
   // Navigation between map categories
   const handleNavClick = (nav) => {
     setSelectedNav(nav);
     setIsNavOpen(false);
 
-    if (nav === 'DoubleMap') {
-      setShowExpressEast(false);
-      setShowExpressWest(false);
-      setShowHospitalExpress(true);
-      setShowHospital(true);
-      setShowOuter(true);
-      setShowInner(true);
-      setShowRailroad(true);
-      setShowBikeShare(false);
-    } else if (nav === 'SBU Bikes') {
-      setShowExpressEast(false);
-      setShowExpressWest(false);
-      setShowHospitalExpress(false);
-      setShowHospital(false);
-      setShowOuter(false);
-      setShowInner(false);
-      setShowRailroad(false);
-      setShowBikeShare(true);
+    if (nav === 'SBU Bikes') {
+      setShowExpressEast((prev) => false);
+      setShowExpressWest((prev) => false);
+      setShowHospitalExpress((prev) => false);
+      setShowHospital((prev) => false);
+      setShowOuter((prev) => false);
+      setShowInner((prev) => false);
+      setShowRailroad((prev) => false);
+      setShowBikeShare((prev) => true);
+    } else if (nav === 'DoubleMap') {
+        setShowExpressEast((prev) => true);
+        setShowExpressWest((prev) => true);
+        setShowHospitalExpress((prev) => true);
+        setShowHospital((prev) => true);
+        setShowOuter((prev) => true);
+        setShowInner((prev) => true);
+        setShowRailroad((prev) => true);
+        setShowBikeShare((prev) => false);
     } else if (nav === 'Nutrislice') {
-      setShowExpressEast(false);
-      setShowExpressWest(false);
-      setShowHospitalExpress(false);
-      setShowHospital(false);
-      setShowOuter(false);
-      setShowInner(false);
-      setShowRailroad(false);
-      setShowBikeShare(false);
+        setShowExpressEast((prev) => false);
+        setShowExpressWest((prev) => false);
+        setShowHospitalExpress((prev) => false);
+        setShowHospital((prev) => false);
+        setShowOuter((prev) => false);
+        setShowInner((prev) => false);
+        setShowRailroad((prev) => false);
+        setShowBikeShare((prev) => false);
     }
-  };
+};
 
   // Handle sliding animation for navigation menu and map
   const toggleNav = () => {
@@ -162,12 +161,14 @@ export default function LeafletMap() {
           javaScriptEnabled={true}
           onMessage={(event) => {
             const data = JSON.parse(event.nativeEvent.data);
+
             if (data.type === 'userLocation') {
               setUserLocation({
                 latitude: data.latitude,
                 longitude: data.longitude,
               });
             }
+
           }}
         />
       </Animated.View>
