@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, TouchableOpacity, Text, Animated, StatusBar } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
 import LocationMarker from './components/LocationMarker';
 import styles from './styles';
 import { leafletHTML } from './utils/mapSetup';
@@ -13,8 +12,8 @@ export default function LeafletMap() {
   const [showExpressWest, setShowExpressWest] = useState(false);
   const [showHospitalExpress, setShowHospitalExpress] = useState(false);
   const [showHospital, setShowHospital] = useState(false);
-  const [showInnerLoop, setShowInnerLoop] = useState(false);
-  const [showOuterLoop, setShowOuterLoop] = useState(false);
+  const [showInner, setShowInner] = useState(false);
+  const [showOuter, setShowOuter] = useState(false);
   const [showRailroad, setShowRailroad ] = useState(false);
 
   const [showBikeShare, setShowBikeShare] = useState(false);
@@ -44,8 +43,8 @@ export default function LeafletMap() {
       showExpressWest: showExpressWest,
       showHospitalExpress: showHospitalExpress,
       showHospital: showHospital,
-      showInner: showInnerLoop,
-      showOuter: showOuterLoop,
+      showInner: showInner,
+      showOuter: showOuter,
       showRailroad: showRailroad,
       showBikeShare: showBikeShare,
     });
@@ -57,8 +56,8 @@ export default function LeafletMap() {
       sendLocationToWebView();
     }
     toggleFeatures();
-  }, [userLocation, showExpressEast, showExpressWest, showHospitalExpress, showOuterLoop, 
-      showInnerLoop, showHospital, showRailroad, showBikeShare]);
+  }, [userLocation, showExpressEast, showExpressWest, showHospitalExpress, showOuter, 
+      showInner, showHospital, showRailroad, showBikeShare]);
 
   // Navigation between map categories
   const handleNavClick = (nav) => {
@@ -66,12 +65,12 @@ export default function LeafletMap() {
     setIsNavOpen(false);
 
     if (nav === 'DoubleMap') {
-      setShowExpressEast(true);
-      setShowExpressWest(true);
+      setShowExpressEast(false);
+      setShowExpressWest(false);
       setShowHospitalExpress(true);
       setShowHospital(true);
-      setShowOuterLoop(true);
-      setShowInnerLoop(true);
+      setShowOuter(true);
+      setShowInner(true);
       setShowRailroad(true);
       setShowBikeShare(false);
     } else if (nav === 'SBU Bikes') {
@@ -79,8 +78,8 @@ export default function LeafletMap() {
       setShowExpressWest(false);
       setShowHospitalExpress(false);
       setShowHospital(false);
-      setShowOuterLoop(false);
-      setShowInnerLoop(false);
+      setShowOuter(false);
+      setShowInner(false);
       setShowRailroad(false);
       setShowBikeShare(true);
     } else if (nav === 'Nutrislice') {
@@ -88,8 +87,8 @@ export default function LeafletMap() {
       setShowExpressWest(false);
       setShowHospitalExpress(false);
       setShowHospital(false);
-      setShowOuterLoop(false);
-      setShowInnerLoop(false);
+      setShowOuter(false);
+      setShowInner(false);
       setShowRailroad(false);
       setShowBikeShare(false);
     }
@@ -139,8 +138,7 @@ export default function LeafletMap() {
 
       {/* Side Navigation Menu */}
       <Animated.View style={[
-        styles.sideNav,
-        { transform: [{ translateX: navAnim }] }
+        styles.sideNav, { transform: [{ translateX: navAnim }] }
       ]}>
         <TouchableOpacity onPress={() => handleNavClick('SBU Bikes')}>
           <Text style={styles.navButton}>SBU Bikes</Text>

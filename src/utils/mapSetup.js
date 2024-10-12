@@ -43,56 +43,60 @@ const leafletHTML = `
         // Create marker icons
         var expressEastStopIcon = new L.Icon({
           iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41] 
+          iconSize: [12, 20],
+          iconAnchor: [6, 20],
+          popupAnchor: [1, -18],
+          shadowSize: [20, 20] 
         });
 
         var expressWestStopIcon = new L.Icon({
           iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41],
+          iconSize: [12, 20],
+          iconAnchor: [6, 20],
+          popupAnchor: [1, -18],
+          shadowSize: [20, 20],
         });
 
         var hospitalExpressStopIcon = new L.Icon({
           iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41],
+          iconSize: [12, 20],
+          iconAnchor: [6, 20],
+          popupAnchor: [1, -18],
+          shadowSize: [20, 20],
         });
 
         var hospitalRouteStopIcon = new L.Icon({
           iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41],
+          iconSize: [12, 20],
+          iconAnchor: [6, 20],
+          popupAnchor: [1, -18],
+          shadowSize: [20, 20],
         });
 
         var outerStopIcon = new L.Icon({ 
           iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png', 
-          iconSize: [25, 41], 
-          iconAnchor: [12, 41], 
-          popupAnchor: [1, -34], 
-          shadowSize: [30, 30] });
+          iconSize: [12, 20], 
+          iconAnchor: [6, 20], 
+          popupAnchor: [1, -18], 
+          shadowSize: [20, 20]
+        });
 
         var innerStopIcon = new L.Icon({ 
           iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png', 
-          iconSize: [25, 41], 
-          iconAnchor: [12, 41], 
-          popupAnchor: [1, -34], 
-          shadowSize: [30, 30] });
+          iconSize: [12, 20], 
+          iconAnchor: [6, 20], 
+          popupAnchor: [1, -18], 
+          shadowSize: [20, 20]
+        });
 
         var redIcon = new L.Icon({ 
           iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png', 
-          iconSize: [25, 41], 
-          iconAnchor: [12, 41], 
-          popupAnchor: [1, -34], 
-          shadowSize: [30, 30] });
+          iconSize: [12, 20], 
+          iconAnchor: [6, 20], 
+          popupAnchor: [1, -18], 
+          shadowSize: [20, 20]
+        });
+
 
         // Initialize map
         var map = L.map('map', { zoomControl: false }).setView([40.9126, -73.1234], 15);
@@ -227,8 +231,7 @@ const leafletHTML = `
           if (data.type === 'userLocation') {
             updateUserLocation(data.latitude, data.longitude);
           } else if (data.type === 'toggleFeatures') {
-            updateMapFeatures(data.showExpressEast, data.showExpressWest, data.showHospitalExpress, 
-                              data.showOuter, data.showInner, data.showHospital, data.showRailroad, data.showBikeShare);
+            updateMapFeatures(data.showExpressEast, data.showExpressWest, data.showHospitalExpress, data.showOuter, data.showInner, data.showHospital, data.showRailroad, data.showBikeShare);
           }
         });
       </script>
