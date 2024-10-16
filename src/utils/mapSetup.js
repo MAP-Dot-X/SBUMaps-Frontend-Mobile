@@ -1,6 +1,6 @@
 import { expressEastRouteCoordinates, expressEastBusStops } from './busData/expressEastData';
 import { expressWestRouteCoordinates, expressWestBusStops } from './busData/expressWestData';
-import { hospitalExpressLoopRouteCoordinates, hospitalExpressLoopBusStops } from './busData/hospitalExpressData';
+import { hospitalExpressRouteCoordinates, hospitalExpressBusStops } from './busData/hospitalExpressData';
 import { hospitalRouteCoordinates, hospitalBusStops } from './busData/hospitalData';
 import { innerRouteCoordinates, innerBusStops } from './busData/innerData';
 import { outerRouteCoordinates, outerBusStops } from './busData/outerData';
@@ -199,8 +199,8 @@ const leafletHTML = `
 
           // Add hospital express route
           if (showHospitalExpress) {
-            hospitalExpressPolyline = L.polyline(${JSON.stringify(hospitalExpressLoopRouteCoordinates)}, {color: 'violet', weight: 3}).addTo(map);
-            ${JSON.stringify(hospitalExpressLoopBusStops)}.forEach(stop => {
+            hospitalExpressPolyline = L.polyline(${JSON.stringify(hospitalExpressRouteCoordinates)}, {color: 'violet', weight: 3}).addTo(map);
+            ${JSON.stringify(hospitalExpressBusStops)}.forEach(stop => {
               var marker = L.marker(stop.position, { icon: hospitalExpressStopIcon }).addTo(map);
               marker.bindPopup(stop.name);
               hospitalExpressStopMarkers.push(marker);

@@ -1,4 +1,4 @@
-export const hospitalExpressLoopRouteCoordinates = [
+export const hospitalExpressRouteCoordinates = [
   [40.908987, -73.114052],
   [40.90894, -73.11426],
   [40.90884, -73.11432],
@@ -68,7 +68,7 @@ export const hospitalExpressLoopRouteCoordinates = [
   [40.896947, -73.126676],
 ];
 
-export const hospitalExpressLoopBusStops = [
+export const hospitalExpressBusStops = [
   { name: 'Lot 40', position: [40.89688182178211, -73.12666708166921] },
   { name: 'Emergency Room', position: [40.90903344643293, -73.11427209004468] },
 ];
