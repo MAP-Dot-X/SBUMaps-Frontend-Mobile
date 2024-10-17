@@ -81,9 +81,7 @@ export default function LeafletMap() {
       setShowExpressEast(true);
       setShowExpressWest(true);
       setShowHospitalExpress(true);
-      //error below
-      setShowHospital(false);
-      //error above
+      setShowHospital(true);
       setShowOuter(true);
       setShowInner(true);
       setShowRailroad(true);

@@ -65,7 +65,7 @@ const leafletHTML = `
           shadowSize: [40, 40]
         });
 
-        var hospitalRouteStopIcon = new L.Icon({
+        var hospitalStopIcon = new L.Icon({
           iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
           iconSize: [22, 37],
           iconAnchor: [11, 37],
@@ -253,7 +253,8 @@ const leafletHTML = `
           if (data.type === 'userLocation') {
             updateUserLocation(data.latitude, data.longitude);
           } else if (data.type === 'toggleFeatures') {
-            updateMapFeatures(data.showExpressEast, data.showExpressWest, data.showHospitalExpress, data.showHospital, data.showInner, data.showOuter, data.showRailroad, data.showBikeShare);
+            updateMapFeatures(data.showExpressEast, data.showExpressWest, data.showHospitalExpress, 
+              data.showHospital, data.showInner, data.showOuter, data.showRailroad, data.showBikeShare);
           }
         });
       </script>
