@@ -147,7 +147,7 @@ const leafletHTML = `
           if (innerPolyLine) map.removeLayer(innerPolyLine);
           if (outerPolyLine) map.removeLayer(outerPolyLine);
           if (railroadPolyline) map.removeLayer(railroadPolyline);
-          
+
           expressEastStopMarkers.forEach(marker => map.removeLayer(marker));
           expressWestStopMarkers.forEach(marker => map.removeLayer(marker));
           hospitalExpressStopMarkers.forEach(marker => map.removeLayer(marker));
@@ -167,7 +167,6 @@ const leafletHTML = `
           railroadStopMarkers = [];
           bikeShareMarkers = [];
 
-
           // Add bike share stations
           if (showBikeShare) {
             ${JSON.stringify(bikeShareStations)}.forEach(station => {
@@ -176,7 +175,6 @@ const leafletHTML = `
               bikeShareMarkers.push(marker);
             });
           }
-
 
           // Add express east route
           if (showExpressEast) {
@@ -218,16 +216,6 @@ const leafletHTML = `
             });
           }
 
-          // Add outer loop
-          if (showOuter) {
-            outerPolyLine = L.polyline(${JSON.stringify(outerRouteCoordinates)}, {color: 'green', weight: 3}).addTo(map);
-            ${JSON.stringify(outerBusStops)}.forEach(stop => {
-              var marker = L.marker(stop.position, { icon: outerStopIcon}).addTo(map);
-              marker.bindPopup(stop.name);
-              outerStopMarkers.push(marker);
-            });
-          }
-
           // Add inner loop
           if (showInner) {
             innerPolyLine = L.polyline(${JSON.stringify(innerRouteCoordinates)}, {color: 'orange', weight: 3}).addTo(map);
@@ -235,6 +223,16 @@ const leafletHTML = `
               var marker = L.marker(stop.position, { icon: innerStopIcon }).addTo(map);
               marker.bindPopup(stop.name);
               innerStopMarkers.push(marker);
+            });
+          }
+
+          // Add outer loop
+          if (showOuter) {
+            outerPolyLine = L.polyline(${JSON.stringify(outerRouteCoordinates)}, {color: 'green', weight: 3}).addTo(map);
+            ${JSON.stringify(outerBusStops)}.forEach(stop => {
+              var marker = L.marker(stop.position, { icon: outerStopIcon}).addTo(map);
+              marker.bindPopup(stop.name);
+              outerStopMarkers.push(marker);
             });
           }
 
