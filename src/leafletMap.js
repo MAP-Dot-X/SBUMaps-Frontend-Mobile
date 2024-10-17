@@ -11,12 +11,12 @@ export default function LeafletMap() {
   const [selectedNav, setSelectedNav] = useState("");
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [mapFeatures, setMapFeatures] = useState({
+    showOuter: false,
+    showInner: false,
+    showHospital: false,
+    showHospitalExpress: false,
     showExpressEast: false,
     showExpressWest: false,
-    showHospitalExpress: false,
-    showHospital: false,
-    showInner: false,
-    showOuter: false,
     showRailroad: false,
     showBikeShare: false,
   });
@@ -25,6 +25,34 @@ export default function LeafletMap() {
   const mapAnim = useRef(new Animated.Value(0)).current; // Map starts at its original position
   const webViewRef = useRef(null);
   const insets = useSafeAreaInsets();
+
+  const handleOuterToggleChange = () => {
+    setMapFeatures({
+      ...mapFeatures,
+      showOuter: !mapFeatures.showOuter,
+    });
+  }
+
+  const handleInnerToggleChange = () => {
+    setMapFeatures({
+      ...mapFeatures,
+      showInner: !mapFeatures.showInner,
+    });
+  }
+
+  const handleHospitalToggleChange = () => {
+    setMapFeatures({
+      ...mapFeatures,
+      showHospital: !mapFeatures.showHospital,
+    });
+  }
+
+  const handleHospitalExpressToggleChange = () => {
+    setMapFeatures({
+      ...mapFeatures,
+      showHospitalExpress: !mapFeatures.showHospitalExpress,
+    });
+  }
 
   const handleExpressEastToggleChange = () => {
     setMapFeatures({
@@ -37,34 +65,6 @@ export default function LeafletMap() {
     setMapFeatures({
       ...mapFeatures,
       showExpressWest: !mapFeatures.showExpressWest,
-    });
-  }
-
-  const handleHospitalExpressToggleChange = () => {
-    setMapFeatures({
-      ...mapFeatures,
-      showHospitalExpress: !mapFeatures.showHospitalExpress,
-    });
-  }
-
-  const handleHospitalToggleChange = () => {
-    setMapFeatures({
-      ...mapFeatures,
-      showHospital: !mapFeatures.showHospital,
-    });
-  }
-
-  const handleInnerToggleChange = () => {
-    setMapFeatures({
-      ...mapFeatures,
-      showInner: !mapFeatures.showInner,
-    });
-  }
-
-  const handleOuterToggleChange = () => {
-    setMapFeatures({
-      ...mapFeatures,
-      showOuter: !mapFeatures.showOuter,
     });
   }
 
@@ -119,12 +119,12 @@ export default function LeafletMap() {
   const handleNavClick = useCallback((nav) => {
     setSelectedNav(nav);
     const features = {
+      showOuter: false,
+      showInner: false,
+      showHospital: false,
+      showHospitalExpress: false,
       showExpressEast: false,
       showExpressWest: false,
-      showHospitalExpress: false,
-      showHospital: false,
-      showInner: false,
-      showOuter: false,
       showRailroad: false,
       showBikeShare: false,
     };
@@ -134,12 +134,12 @@ export default function LeafletMap() {
         features.showBikeShare = true;
         break;
       case "DoubleMap":
-        features.showExpressEast = true;
-        features.showExpressWest = true;
-        features.showHospitalExpress = true;
-        features.showHospital = true;
         features.showOuter = true;
         features.showInner = true;
+        features.showHospital = true;
+        features.showHospitalExpress = true;
+        features.showExpressEast = true;
+        features.showExpressWest = true;
         features.showRailroad = true;
         break;
       case "Nutrislice":
@@ -275,21 +275,7 @@ export default function LeafletMap() {
         </View>
       )}
       </View>
-
-
-
-
-
-
-
-
-
-
-
-
       </Animated.View>
-
-
 
 
       {/* Animated Container for the Map */}
