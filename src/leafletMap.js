@@ -24,6 +24,13 @@ export default function LeafletMap() {
   const webViewRef = useRef(null);
   const insets = useSafeAreaInsets();
 
+    // Function to handle pressing on the map area
+    const handleMapPress = () => {
+      if (isNavOpen == true) {
+        toggleNav();
+      }
+    };
+
   // Functions for sending messages to the WebView and toggling map features
   const sendLocationToWebView = () => {
     if (userLocation && webViewRef.current) {
@@ -156,6 +163,11 @@ export default function LeafletMap() {
       </Animated.View>
 
       {/* Animated Container for the Map */}
+      <TouchableOpacity 
+        style={{ flex: 1 }} 
+        activeOpacity={1} 
+        onPress={handleMapPress}
+      >
       <Animated.View style={{ flex: 1, transform: [{ translateX: mapAnim }] }}>
         <WebView
           ref={webViewRef}
@@ -176,6 +188,8 @@ export default function LeafletMap() {
           }}
         />
       </Animated.View>
+      </TouchableOpacity>
+
 
       {/* Location Marker */}
       <LocationMarker onLocationChange={setUserLocation} />
