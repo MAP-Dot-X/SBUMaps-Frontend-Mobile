@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { View, TouchableOpacity, Text, Animated, StatusBar } from "react-native";
+import { View, TouchableOpacity, Text, Animated, StatusBar, Switch } from "react-native";
 import { WebView } from "react-native-webview";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import LocationMarker from "./components/LocationMarker";
@@ -25,6 +25,62 @@ export default function LeafletMap() {
   const mapAnim = useRef(new Animated.Value(0)).current; // Map starts at its original position
   const webViewRef = useRef(null);
   const insets = useSafeAreaInsets();
+
+  const handleExpressEastToggleChange = () => {
+    setMapFeatures({
+      ...mapFeatures,
+      showExpressEast: !mapFeatures.showExpressEast,
+    });
+  }
+
+  const handleExpressWestToggleChange = () => {
+    setMapFeatures({
+      ...mapFeatures,
+      showExpressWest: !mapFeatures.showExpressWest,
+    });
+  }
+
+  const handleHospitalExpressToggleChange = () => {
+    setMapFeatures({
+      ...mapFeatures,
+      showHospitalExpress: !mapFeatures.showHospitalExpress,
+    });
+  }
+
+  const handleHospitalToggleChange = () => {
+    setMapFeatures({
+      ...mapFeatures,
+      showHospital: !mapFeatures.showHospital,
+    });
+  }
+
+  const handleInnerToggleChange = () => {
+    setMapFeatures({
+      ...mapFeatures,
+      showInner: !mapFeatures.showInner,
+    });
+  }
+
+  const handleOuterToggleChange = () => {
+    setMapFeatures({
+      ...mapFeatures,
+      showOuter: !mapFeatures.showOuter,
+    });
+  }
+
+  const handleRailroadToggleChange = () => {
+    setMapFeatures({
+      ...mapFeatures,
+      showRailroad: !mapFeatures.showRailroad,
+    });
+  }
+
+  const handleBikeShareToggleChange = () => {
+    setMapFeatures({
+      ...mapFeatures,
+      showBikeShare: !mapFeatures.showBikeShare,
+    });
+  }
 
   // Function to handle pressing on the map area
   const handleMapPress = () => {
@@ -154,7 +210,87 @@ export default function LeafletMap() {
         <TouchableOpacity onPress={() => handleNavClick("Nutrislice")}>
           <Text style={styles.navButton}>Nutrislice</Text>
         </TouchableOpacity>
+
+
+
+
+
+
+
+
+      <View style={styles.container}>
+      {selectedNav === 'DoubleMap' && (
+        <View style={styles.checkboxMenu}>
+          <View style={styles.toggleButton}>
+            <Switch
+              onValueChange={handleOuterToggleChange}
+            />
+            <Text style={styles.label}>Outer Loop</Text>
+          </View>
+
+          <View style={styles.toggleButton}>
+            <Switch
+              onValueChange={handleInnerToggleChange}
+            />
+            <Text style={styles.label}>Inner Loop</Text>
+          </View>
+
+          <View style={styles.toggleButton}>
+            <Switch
+              onValueChange={handleHospitalToggleChange}
+            />
+            <Text style={styles.label}>Hospital/Chapin</Text>
+          </View>
+
+          <View style={styles.toggleButton}>
+            <Switch
+              onValueChange={handleHospitalExpressToggleChange}
+            />
+            <Text style={styles.label}>Hospital Express</Text>
+          </View>
+
+          <View style={styles.toggleButton}>
+            <Switch
+              onValueChange={handleExpressEastToggleChange}
+            />
+            <Text style={styles.label}>East Express</Text>
+          </View>
+
+          <View style={styles.toggleButton}>
+            <Switch
+              onValueChange={handleExpressWestToggleChange}
+            />
+            <Text style={styles.label}>Express West</Text>
+          </View>
+
+          <View style={styles.toggleButton}>
+            <Switch
+              onValueChange={handleRailroadToggleChange}
+            />
+            <Text style={styles.label}>Railroad</Text>
+          </View>
+
+
+
+        </View>
+      )}
+      </View>
+
+
+
+
+
+
+
+
+
+
+
+
       </Animated.View>
+
+
+
 
       {/* Animated Container for the Map */}
       <TouchableOpacity 
