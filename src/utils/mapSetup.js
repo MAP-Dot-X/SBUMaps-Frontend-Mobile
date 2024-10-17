@@ -110,6 +110,13 @@ const leafletHTML = `
         var map = L.map('map', { zoomControl: false }).setView([40.9126, -73.1234], 15);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
 
+        // Function to update user location
+        function updateUserLocation(lat, lng) {
+          if (userMarker) { map.removeLayer(userMarker); }
+          userMarker = L.marker([lat, lng]).addTo(map).bindPopup('You are here').openPopup();
+          map.setView([lat, lng], 15);
+        }
+
         // Initialize map features
         var userMarker, 
         expressEastPolyline, 
@@ -129,12 +136,6 @@ const leafletHTML = `
         railroadStopMarkers = [], 
         bikeShareMarkers = [];
 
-        // Function to update user location
-        function updateUserLocation(lat, lng) {
-          if (userMarker) { map.removeLayer(userMarker); }
-          userMarker = L.marker([lat, lng]).addTo(map).bindPopup('You are here').openPopup();
-          map.setView([lat, lng], 15);
-        }
 
         // Function to show map features
         function updateMapFeatures(showExpressEast, showExpressWest, showHospitalExpress, showHospital, showInner, showOuter, showRailroad, showBikeShare) {
@@ -207,6 +208,16 @@ const leafletHTML = `
             });
           }
 
+          // Add hospital route
+          if (showHospital) {
+            hospitalPolyline = L.polyline(${JSON.stringify(hospitalRouteCoordinates)}, {color: 'purple', weight: 3}).addTo(map);
+            ${JSON.stringify(hospitalBusStops)}.forEach(stop => {
+              var marker = L.marker(stop.position, { icon: hospitalStopIcon}).addTo(map);
+              marker.bindPopup(stop.name);
+              hospitalStopMarkers.push(marker);
+            });
+          }
+
           // Add outer loop
           if (showOuter) {
             outerPolyLine = L.polyline(${JSON.stringify(outerRouteCoordinates)}, {color: 'green', weight: 3}).addTo(map);
@@ -224,16 +235,6 @@ const leafletHTML = `
               var marker = L.marker(stop.position, { icon: innerStopIcon }).addTo(map);
               marker.bindPopup(stop.name);
               innerStopMarkers.push(marker);
-            });
-          }
-
-          // Add hospital route
-          if (showHospital) {
-            hospitalPolyline = L.polyline(${JSON.stringify(hospitalRouteCoordinates)}, {color: 'purple', weight: 3}).addTo(map);
-            ${JSON.stringify(hospitalBusStops)}.forEach(stop => {
-              var marker = L.marker(stop.position, { icon: hospitalStopIcon}).addTo(map);
-              marker.bindPopup(stop.name);
-              hospitalStopMarkers.push(marker);
             });
           }
 
