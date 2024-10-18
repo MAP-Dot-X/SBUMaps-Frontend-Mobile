@@ -30,7 +30,7 @@ export default StyleSheet.create({
   sideNav: {
     position: 'absolute',
     top: 120,
-    right: 0,
+    right: 25,
     width: 200,
     height: '98%',
     backgroundColor: 'white',
@@ -42,7 +42,8 @@ export default StyleSheet.create({
   },  
   navButton: {
     fontSize: 18,
-    padding: 5,
+    padding: 8,
+    right: 15,
     color: 'black',
   },
   toggleContainer: {
@@ -58,5 +59,29 @@ export default StyleSheet.create({
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
+  },
+  checkboxMenu: {
+
+  },
+  toggleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    borderRadius: 10,
+    marginVertical: 5,
+    width: '100%',
+    left: 15,
+  },
+  label: {
+    fontSize: 14,
+    color: '#333',
+    textAlign: 'center',
+    marginHorizontal: 10,
+    flex: 1,
+  },
+  switch: {
+    transform: [{ scaleX: 1 }, { scaleY: 1 }],
   },
 });

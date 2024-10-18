@@ -31,56 +31,56 @@ export default function LeafletMap() {
       ...mapFeatures,
       showOuter: !mapFeatures.showOuter,
     });
-  }
+  };
 
   const handleInnerToggleChange = () => {
     setMapFeatures({
       ...mapFeatures,
       showInner: !mapFeatures.showInner,
     });
-  }
+  };
 
   const handleHospitalToggleChange = () => {
     setMapFeatures({
       ...mapFeatures,
       showHospital: !mapFeatures.showHospital,
     });
-  }
+  };
 
   const handleHospitalExpressToggleChange = () => {
     setMapFeatures({
       ...mapFeatures,
       showHospitalExpress: !mapFeatures.showHospitalExpress,
     });
-  }
+  };
 
   const handleExpressEastToggleChange = () => {
     setMapFeatures({
       ...mapFeatures,
       showExpressEast: !mapFeatures.showExpressEast,
     });
-  }
+  };
 
   const handleExpressWestToggleChange = () => {
     setMapFeatures({
       ...mapFeatures,
       showExpressWest: !mapFeatures.showExpressWest,
     });
-  }
+  };
 
   const handleRailroadToggleChange = () => {
     setMapFeatures({
       ...mapFeatures,
       showRailroad: !mapFeatures.showRailroad,
     });
-  }
+  };
 
   const handleBikeShareToggleChange = () => {
     setMapFeatures({
       ...mapFeatures,
       showBikeShare: !mapFeatures.showBikeShare,
     });
-  }
+  };
 
   // Function to handle pressing on the map area
   const handleMapPress = () => {
@@ -116,42 +116,45 @@ export default function LeafletMap() {
   }, [mapFeatures, toggleFeatures]);
 
   // Navigation between map categories
-  const handleNavClick = useCallback((nav) => {
-    setSelectedNav(nav);
-    const features = {
-      showOuter: false,
-      showInner: false,
-      showHospital: false,
-      showHospitalExpress: false,
-      showExpressEast: false,
-      showExpressWest: false,
-      showRailroad: false,
-      showBikeShare: false,
-    };
+  const handleNavClick = useCallback(
+    (nav) => {
+      setSelectedNav(nav);
+      const features = {
+        showOuter: false,
+        showInner: false,
+        showHospital: false,
+        showHospitalExpress: false,
+        showExpressEast: false,
+        showExpressWest: false,
+        showRailroad: false,
+        showBikeShare: false,
+      };
 
-    switch (nav) {
-      case "SBU Bikes":
-        features.showBikeShare = true;
-        break;
-      case "DoubleMap":
-        features.showOuter = true;
-        features.showInner = true;
-        features.showHospital = true;
-        features.showHospitalExpress = true;
-        features.showExpressEast = true;
-        features.showExpressWest = true;
-        features.showRailroad = true;
-        break;
-      case "Nutrislice":
-        // No features yet
-      break;
-      default:
-        break;
-    }
+      switch (nav) {
+        case "SBU Bikes":
+          features.showBikeShare = true;
+          break;
+        case "DoubleMap":
+          features.showOuter = true;
+          features.showInner = true;
+          features.showHospital = true;
+          features.showHospitalExpress = true;
+          features.showExpressEast = true;
+          features.showExpressWest = true;
+          features.showRailroad = true;
+          break;
+        case "Nutrislice":
+          // No features yet
+          break;
+        default:
+          break;
+      }
 
-    setMapFeatures(features);
-    toggleFeatures();
-  }, [isNavOpen, toggleFeatures]);
+      setMapFeatures(features);
+      toggleFeatures();
+    },
+    [isNavOpen, toggleFeatures]
+  );
 
   // Handle sliding animation for navigation menu and map
   const toggleNav = () => {
@@ -165,7 +168,7 @@ export default function LeafletMap() {
           useNativeDriver: true,
         }),
         Animated.timing(mapAnim, {
-          toValue: -200, // Move map to the side
+          toValue: -250, // Move map to the side
           duration: 350,
           useNativeDriver: true,
         }),
@@ -200,7 +203,9 @@ export default function LeafletMap() {
       </Animated.View>
 
       {/* Side Navigation Menu */}
-      <Animated.View style={[styles.sideNav, { transform: [{ translateX: navAnim }] }]}>
+      <Animated.View
+        style={[styles.sideNav, { transform: [{ translateX: navAnim }] }]}
+      >
         <TouchableOpacity onPress={() => handleNavClick("SBU Bikes")}>
           <Text style={styles.navButton}>SBU Bikes</Text>
         </TouchableOpacity>
@@ -211,80 +216,85 @@ export default function LeafletMap() {
           <Text style={styles.navButton}>Nutrislice</Text>
         </TouchableOpacity>
 
+        <Animated.View
+          style={[styles.sideNav, { transform: [{ translateX: navAnim }] }]}
+        >
+          <View style={styles.checkboxMenu}>
+            <View style={[styles.toggleButton]}>
+              <Switch
+                onValueChange={handleOuterToggleChange}
+                value={mapFeatures.showOuter}
+                trackColor={{ false: "#767577", true: "#4caf50" }}
+              />
+              <Text style={styles.label}>Outer Loop</Text>
+            </View>
 
+            <View style={[styles.toggleButton]}>
+              <Switch
+                onValueChange={handleInnerToggleChange}
+                value={mapFeatures.showInner}
+                trackColor={{ false: "#767577", true: "#ffa500" }}
+              />
+              <Text style={styles.label}>Inner Loop</Text>
+            </View>
 
+            <View style={[styles.toggleButton]}>
+              <Switch
+                onValueChange={handleHospitalToggleChange}
+                value={mapFeatures.showHospital}
+                trackColor={{ false: "#767577", true: "#8a2be2" }}
+              />
+              <Text style={styles.label}>Hospital/Chapin</Text>
+            </View>
 
+            <View style={[styles.toggleButton]}>
+              <Switch
+                onValueChange={handleHospitalExpressToggleChange}
+                value={mapFeatures.showHospitalExpress}
+                trackColor={{ false: "#767577", true: "#e22bca" }}
+              />
+              <Text style={styles.label}>Hospital Express</Text>
+            </View>
 
+            <View style={[styles.toggleButton]}>
+              <Switch
+                onValueChange={handleExpressEastToggleChange}
+                value={mapFeatures.showExpressEast}
+                trackColor={{ false: "#767577", true: "#2b37e2" }}
+              />
+              <Text style={styles.label}>East Express</Text>
+            </View>
 
+            <View style={[styles.toggleButton]}>
+              <Switch
+                onValueChange={handleExpressWestToggleChange}
+                value={mapFeatures.showExpressWest}
+                trackColor={{ false: "#767577", true: "#e22b2b" }}
+              />
+              <Text style={styles.label}>Express West</Text>
+            </View>
 
-
-      <View style={styles.container}>
-      {selectedNav === 'DoubleMap' && (
-        <View style={styles.checkboxMenu}>
-          <View style={styles.toggleButton}>
-            <Switch
-              onValueChange={handleOuterToggleChange}
-            />
-            <Text style={styles.label}>Outer Loop</Text>
+            <View style={[styles.toggleButton]}>
+              <Switch
+                onValueChange={handleRailroadToggleChange}
+                value={mapFeatures.showRailroad}
+                trackColor={{ false: "#767577", true: "#212121" }}
+                />
+              <Text style={styles.label}>Railroad</Text>
+            </View>
           </View>
-
-          <View style={styles.toggleButton}>
-            <Switch
-              onValueChange={handleInnerToggleChange}
-            />
-            <Text style={styles.label}>Inner Loop</Text>
-          </View>
-
-          <View style={styles.toggleButton}>
-            <Switch
-              onValueChange={handleHospitalToggleChange}
-            />
-            <Text style={styles.label}>Hospital/Chapin</Text>
-          </View>
-
-          <View style={styles.toggleButton}>
-            <Switch
-              onValueChange={handleHospitalExpressToggleChange}
-            />
-            <Text style={styles.label}>Hospital Express</Text>
-          </View>
-
-          <View style={styles.toggleButton}>
-            <Switch
-              onValueChange={handleExpressEastToggleChange}
-            />
-            <Text style={styles.label}>East Express</Text>
-          </View>
-
-          <View style={styles.toggleButton}>
-            <Switch
-              onValueChange={handleExpressWestToggleChange}
-            />
-            <Text style={styles.label}>Express West</Text>
-          </View>
-
-          <View style={styles.toggleButton}>
-            <Switch
-              onValueChange={handleRailroadToggleChange}
-            />
-            <Text style={styles.label}>Railroad</Text>
-          </View>
-
-
-
-        </View>
-      )}
-      </View>
+        </Animated.View>
       </Animated.View>
 
-
       {/* Animated Container for the Map */}
-      <TouchableOpacity 
-        style={{ flex: 1 }} 
-        activeOpacity={1} 
+      <TouchableOpacity
+        style={{ flex: 1 }}
+        activeOpacity={1}
         onPress={handleMapPress} // Add onPress handler for the map area
       >
-        <Animated.View style={{ flex: 1, transform: [{ translateX: mapAnim }] }}>
+        <Animated.View
+          style={{ flex: 1, transform: [{ translateX: mapAnim }] }}
+        >
           <WebView
             ref={webViewRef}
             originWhitelist={["*"]}
