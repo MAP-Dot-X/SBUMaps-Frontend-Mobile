@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { View, TouchableOpacity, Text, Animated, StatusBar, Switch } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  Animated,
+  StatusBar,
+  Switch,
+} from "react-native";
 import { WebView } from "react-native-webview";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import LocationMarker from "./components/LocationMarker";
@@ -79,6 +86,30 @@ export default function LeafletMap() {
     setMapFeatures({
       ...mapFeatures,
       showBikeShare: !mapFeatures.showBikeShare,
+    });
+  };
+
+  const handleSelectAll = () => {
+    setMapFeatures({
+      showOuter: true,
+      showInner: true,
+      showHospital: true,
+      showHospitalExpress: true,
+      showExpressEast: true,
+      showExpressWest: true,
+      showRailroad: true,
+    });
+  };
+
+  const handleSelectNone = () => {
+    setMapFeatures({
+      showOuter: false,
+      showInner: false,
+      showHospital: false,
+      showHospitalExpress: false,
+      showExpressEast: false,
+      showExpressWest: false,
+      showRailroad: false,
     });
   };
 
@@ -209,81 +240,94 @@ export default function LeafletMap() {
         <TouchableOpacity onPress={() => handleNavClick("SBU Bikes")}>
           <Text style={styles.navButton}>SBU Bikes</Text>
         </TouchableOpacity>
+
         <TouchableOpacity onPress={() => handleNavClick("DoubleMap")}>
           <Text style={styles.navButton}>DoubleMap</Text>
         </TouchableOpacity>
+
+        {selectedNav === "DoubleMap" && (
+          <Animated.View
+            style={[styles.sideNav, { transform: [{ translateX: navAnim }] }]}
+          >
+            <View style={styles.checkboxMenu}>
+              <View style={[styles.toggleButton]}>
+                <Switch
+                  onValueChange={handleOuterToggleChange}
+                  value={mapFeatures.showOuter}
+                  trackColor={{ false: "#767577", true: "#4caf50" }}
+                />
+                <Text style={styles.label}>Outer Loop</Text>
+              </View>
+
+              <View style={[styles.toggleButton]}>
+                <Switch
+                  onValueChange={handleInnerToggleChange}
+                  value={mapFeatures.showInner}
+                  trackColor={{ false: "#767577", true: "#ffa500" }}
+                />
+                <Text style={styles.label}>Inner Loop</Text>
+              </View>
+
+              <View style={[styles.toggleButton]}>
+                <Switch
+                  onValueChange={handleHospitalToggleChange}
+                  value={mapFeatures.showHospital}
+                  trackColor={{ false: "#767577", true: "#8a2be2" }}
+                />
+                <Text style={styles.label}>Hospital/Chapin</Text>
+              </View>
+
+              <View style={[styles.toggleButton]}>
+                <Switch
+                  onValueChange={handleHospitalExpressToggleChange}
+                  value={mapFeatures.showHospitalExpress}
+                  trackColor={{ false: "#767577", true: "#e22bca" }}
+                />
+                <Text style={styles.label}>Hospital Express</Text>
+              </View>
+
+              <View style={[styles.toggleButton]}>
+                <Switch
+                  onValueChange={handleExpressEastToggleChange}
+                  value={mapFeatures.showExpressEast}
+                  trackColor={{ false: "#767577", true: "#2b37e2" }}
+                />
+                <Text style={styles.label}>East Express</Text>
+              </View>
+
+              <View style={[styles.toggleButton]}>
+                <Switch
+                  onValueChange={handleExpressWestToggleChange}
+                  value={mapFeatures.showExpressWest}
+                  trackColor={{ false: "#767577", true: "#e22b2b" }}
+                />
+                <Text style={styles.label}>Express West</Text>
+              </View>
+
+              <View style={[styles.toggleButton]}>
+                <Switch
+                  onValueChange={handleRailroadToggleChange}
+                  value={mapFeatures.showRailroad}
+                  trackColor={{ false: "#767577", true: "#212121" }}
+                />
+                <Text style={styles.label}>Railroad</Text>
+              </View>
+
+              <TouchableOpacity onPress={handleSelectAll} style={[styles.toggleSelectButton]}>
+                <Text style={styles.label} onValueChange={handleSelectAll}>Select All</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={handleSelectNone} style={[styles.toggleSelectButton]}>
+                <Text style={styles.label}>Select None</Text>
+              </TouchableOpacity>
+
+            </View>
+          </Animated.View>
+        )}
+
         <TouchableOpacity onPress={() => handleNavClick("Nutrislice")}>
           <Text style={styles.navButton}>Nutrislice</Text>
         </TouchableOpacity>
-
-        <Animated.View
-          style={[styles.sideNav, { transform: [{ translateX: navAnim }] }]}
-        >
-          <View style={styles.checkboxMenu}>
-            <View style={[styles.toggleButton]}>
-              <Switch
-                onValueChange={handleOuterToggleChange}
-                value={mapFeatures.showOuter}
-                trackColor={{ false: "#767577", true: "#4caf50" }}
-              />
-              <Text style={styles.label}>Outer Loop</Text>
-            </View>
-
-            <View style={[styles.toggleButton]}>
-              <Switch
-                onValueChange={handleInnerToggleChange}
-                value={mapFeatures.showInner}
-                trackColor={{ false: "#767577", true: "#ffa500" }}
-              />
-              <Text style={styles.label}>Inner Loop</Text>
-            </View>
-
-            <View style={[styles.toggleButton]}>
-              <Switch
-                onValueChange={handleHospitalToggleChange}
-                value={mapFeatures.showHospital}
-                trackColor={{ false: "#767577", true: "#8a2be2" }}
-              />
-              <Text style={styles.label}>Hospital/Chapin</Text>
-            </View>
-
-            <View style={[styles.toggleButton]}>
-              <Switch
-                onValueChange={handleHospitalExpressToggleChange}
-                value={mapFeatures.showHospitalExpress}
-                trackColor={{ false: "#767577", true: "#e22bca" }}
-              />
-              <Text style={styles.label}>Hospital Express</Text>
-            </View>
-
-            <View style={[styles.toggleButton]}>
-              <Switch
-                onValueChange={handleExpressEastToggleChange}
-                value={mapFeatures.showExpressEast}
-                trackColor={{ false: "#767577", true: "#2b37e2" }}
-              />
-              <Text style={styles.label}>East Express</Text>
-            </View>
-
-            <View style={[styles.toggleButton]}>
-              <Switch
-                onValueChange={handleExpressWestToggleChange}
-                value={mapFeatures.showExpressWest}
-                trackColor={{ false: "#767577", true: "#e22b2b" }}
-              />
-              <Text style={styles.label}>Express West</Text>
-            </View>
-
-            <View style={[styles.toggleButton]}>
-              <Switch
-                onValueChange={handleRailroadToggleChange}
-                value={mapFeatures.showRailroad}
-                trackColor={{ false: "#767577", true: "#212121" }}
-                />
-              <Text style={styles.label}>Railroad</Text>
-            </View>
-          </View>
-        </Animated.View>
       </Animated.View>
 
       {/* Animated Container for the Map */}
