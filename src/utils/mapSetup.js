@@ -309,6 +309,16 @@ const leafletHTML = `
               marker.bindPopup(stop.name);
               expressEastStopMarkers.push(marker);
             });
+
+            Object.keys(busMarkers).forEach(id => {
+              if (busMarkers[id].options.icon === busExpressEast)
+                map.addLayer(busMarkers[id]);
+            });
+          } else {
+            Object.keys(busMarkers).forEach(id => {
+              if (busMarkers[id].options.icon === busExpressEast)
+                map.removeLayer(busMarkers[id]);
+            });
           }
 
           // Add express west route
@@ -318,6 +328,16 @@ const leafletHTML = `
               var marker = L.marker(stop.position, { icon: expressWestStopIcon }).addTo(map);
               marker.bindPopup(stop.name);
               expressWestStopMarkers.push(marker);
+            });
+
+            Object.keys(busMarkers).forEach(id => {
+              if (busMarkers[id].options.icon === busExpressWest)
+                map.addLayer(busMarkers[id]);
+            });
+          } else {
+            Object.keys(busMarkers).forEach(id => {
+              if (busMarkers[id].options.icon === busExpressWest)
+                map.removeLayer(busMarkers[id]);
             });
           }
 
@@ -329,6 +349,16 @@ const leafletHTML = `
               marker.bindPopup(stop.name);
               hospitalExpressStopMarkers.push(marker);
             });
+
+            Object.keys(busMarkers).forEach(id => {
+              if (busMarkers[id].options.icon === busHospitalExpress)
+                map.addLayer(busMarkers[id]);
+            });
+          } else {
+            Object.keys(busMarkers).forEach(id => {
+              if (busMarkers[id].options.icon === busHospitalExpress)
+                map.removeLayer(busMarkers[id]);
+            });
           }
 
           // Add hospital route
@@ -338,6 +368,16 @@ const leafletHTML = `
               var marker = L.marker(stop.position, { icon: hospitalStopIcon}).addTo(map);
               marker.bindPopup(stop.name);
               hospitalStopMarkers.push(marker);
+            });
+
+            Object.keys(busMarkers).forEach(id => {
+              if (busMarkers[id].options.icon === busHospital)
+                map.addLayer(busMarkers[id]);
+            });
+          } else {
+            Object.keys(busMarkers).forEach(id => {
+              if (busMarkers[id].options.icon === busHospital)
+                map.removeLayer(busMarkers[id]);
             });
           }
 
@@ -349,6 +389,16 @@ const leafletHTML = `
               marker.bindPopup(stop.name);
               innerStopMarkers.push(marker);
             });
+
+            Object.keys(busMarkers).forEach(id => {
+              if (busMarkers[id].options.icon === busInner)
+                map.addLayer(busMarkers[id]);
+            });
+          } else {
+            Object.keys(busMarkers).forEach(id => {
+              if (busMarkers[id].options.icon === busInner)
+                map.removeLayer(busMarkers[id]);
+            });
           }
 
           // Add outer loop
@@ -359,6 +409,16 @@ const leafletHTML = `
               marker.bindPopup(stop.name);
               outerStopMarkers.push(marker);
             });
+
+            Object.keys(busMarkers).forEach(id => {
+              if (busMarkers[id].options.icon === busOuter)
+                map.addLayer(busMarkers[id]);
+            });
+          } else {
+            Object.keys(busMarkers).forEach(id => {
+              if (busMarkers[id].options.icon === busOuter)
+                map.removeLayer(busMarkers[id]);
+            });
           }
 
           // Add railroad loop
@@ -368,6 +428,16 @@ const leafletHTML = `
               var marker = L.marker(stop.position, { icon: railroadStopIcon }).addTo(map);
               marker.bindPopup(stop.name);
               railroadStopMarkers.push(marker);
+            });
+
+            Object.keys(busMarkers).forEach(id => {
+              if (busMarkers[id].options.icon === busRailroad)
+                map.addLayer(busMarkers[id]);
+            });
+          } else {
+            Object.keys(busMarkers).forEach(id => {
+              if (busMarkers[id].options.icon === busRailroad)
+                map.removeLayer(busMarkers[id]);
             });
           }
         }
