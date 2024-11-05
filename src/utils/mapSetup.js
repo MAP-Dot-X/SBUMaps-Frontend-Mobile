@@ -211,7 +211,6 @@ const leafletHTML = `
             }
           });
 
-          // Add or update markers for each bus
           buses.forEach(bus => {
             let markerIcon;
             let name;
@@ -248,7 +247,7 @@ const leafletHTML = `
             if (busMarkers[bus.id]) {
               busMarkers[bus.id].setLatLng([bus.lat, bus.lon]);
             } else {
-              const marker = L.marker([bus.lat, bus.lon], { icon: markerIcon }).addTo(map);
+              const marker = L.marker([bus.lat, bus.lon], { icon: markerIcon });
               marker.bindPopup(\`
               <div>
                 <strong>\${name}</strong><br />
