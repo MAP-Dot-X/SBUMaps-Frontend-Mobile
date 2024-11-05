@@ -105,6 +105,70 @@ const leafletHTML = `
           shadowSize: [40, 40]
         });
 
+        //Bus Icons
+        var busExpressEast = new L.Icon({
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+          iconSize: [22, 37],
+          iconAnchor: [11, 37],
+          popupAnchor: [1, -30],
+          shadowSize: [40, 40]
+        });
+
+        var busExpressWest = new L.Icon({
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+          iconSize: [22, 37],
+          iconAnchor: [11, 37],
+          popupAnchor: [1, -30],
+          shadowSize: [40, 40]
+        });
+
+        var busHospitalExpress = new L.Icon({
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
+          iconSize: [22, 37],
+          iconAnchor: [11, 37],
+          popupAnchor: [1, -30],
+          shadowSize: [40, 40]
+        });
+
+        var busHospital = new L.Icon({
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
+          iconSize: [22, 37],
+          iconAnchor: [11, 37],
+          popupAnchor: [1, -30],
+          shadowSize: [40, 40]
+        });
+
+        var busInner = new L.Icon({ 
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png', 
+          iconSize: [22, 37],
+          iconAnchor: [11, 37],
+          popupAnchor: [1, -30],
+          shadowSize: [40, 40]
+        });
+
+        var busOuter = new L.Icon({ 
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png', 
+          iconSize: [22, 37],
+          iconAnchor: [11, 37],
+          popupAnchor: [1, -30],
+          shadowSize: [40, 40]
+        });
+
+        var busRailroad = new L.Icon({ 
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png',
+          iconSize: [22, 37],
+          iconAnchor: [11, 37],
+          popupAnchor: [1, -30],
+          shadowSize: [40, 40]
+        });
+
+        var busIcon = new L.Icon({ 
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-gray.png',
+          iconSize: [22, 37],
+          iconAnchor: [11, 37],
+          popupAnchor: [1, -30],
+          shadowSize: [40, 40]
+        });
 
         // Initialize map
         var map = L.map('map', { zoomControl: false }).setView([40.9126, -73.1234], 15);
@@ -135,6 +199,67 @@ const leafletHTML = `
         outerStopMarkers = [], 
         railroadStopMarkers = [], 
         bikeShareMarkers = [];
+
+        var busMarkers = {};
+
+        // Function to update bus markers on the map
+        function updateBusMarkers(buses) {
+          Object.keys(busMarkers).forEach(id => {
+            if (!buses.some(bus => bus.id === parseInt(id))) {
+              map.removeLayer(busMarkers[id]);
+              delete busMarkers[id];
+            }
+          });
+
+          // Add or update markers for each bus
+          buses.forEach(bus => {
+            let markerIcon;
+            let name;
+
+            switch (bus.route) {
+              case 529:
+                markerIcon = busExpressEast;
+                name = 'Express East';
+                break;
+              case 530:
+                markerIcon = busExpressWest;
+                name = 'Express West';
+                break;
+              case 531:
+                markerIcon = busHospital;
+                name = 'Hospital';
+                break;
+              case 533:
+                markerIcon = busInner;
+                name = 'Inner';
+                break;
+              case 534:
+                markerIcon = busOuter;
+                name = 'Outer';
+                break;
+              case 537:
+                markerIcon = busRailroad;
+                name = 'Railroad';
+                break;
+              default:
+                return;
+            }
+
+            if (busMarkers[bus.id]) {
+              busMarkers[bus.id].setLatLng([bus.lat, bus.lon]);
+            } else {
+              const marker = L.marker([bus.lat, bus.lon], { icon: markerIcon }).addTo(map);
+              marker.bindPopup(\`
+              <div>
+                <strong>\${name}</strong><br />
+                Heading: \${bus.heading}°<br />
+                Last stop ID: \${bus.lastStop || 'Unknown'}
+              </div>
+            \`);
+              busMarkers[bus.id] = marker;
+            }
+          });
+        }
 
 
         // Function to show map features
@@ -254,8 +379,11 @@ const leafletHTML = `
           } else if (data.type === 'toggleFeatures') {
             updateMapFeatures(data.showExpressEast, data.showExpressWest, data.showHospitalExpress, 
               data.showHospital, data.showInner, data.showOuter, data.showRailroad, data.showBikeShare);
+          } else if (data.type === 'busData') {
+            updateBusMarkers(data.buses);
           }
         });
+
       </script>
     </body>
   </html>

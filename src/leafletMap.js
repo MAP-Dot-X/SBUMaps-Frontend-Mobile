@@ -33,6 +33,29 @@ export default function LeafletMap() {
   const webViewRef = useRef(null);
   const insets = useSafeAreaInsets();
 
+  // Function to fetch live bus data
+  const fetchBusData = async () => {
+    try {
+      const response = await fetch('https://stonybrookuniversity.doublemap.com/map/v2/buses');
+      const buses = await response.json();
+      return buses;
+    } catch (error) {
+      console.error("Error fetching bus data:", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      const buses = await fetchBusData();
+      if (webViewRef.current) {
+        webViewRef.current.postMessage(JSON.stringify({ type: 'busData', buses }));
+      }
+    }, 2000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   const handleOuterToggleChange = () => {
     setMapFeatures({
       ...mapFeatures,
