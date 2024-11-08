@@ -161,13 +161,6 @@ const leafletHTML = `
           shadowSize: [44, 44]
         });
 
-        var busIcon = new L.Icon({ 
-          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-gray.png',
-          iconSize: [22, 37],
-          iconAnchor: [11, 37],
-          popupAnchor: [1, -30],
-          shadowSize: [40, 40]
-        });
 
         // Initialize map
         var map = L.map('map', { zoomControl: false }).setView([40.9126, -73.1234], 15);
@@ -176,7 +169,7 @@ const leafletHTML = `
         // Function to update user location
         function updateUserLocation(lat, lng) {
           if (userMarker) { map.removeLayer(userMarker); }
-          userMarker = L.marker([lat, lng]).addTo(map).bindPopup('You are here').openPopup();
+          userMarker = L.marker([lat, lng]).addTo(map).bindPopup('Your location').openPopup();
           map.setView([lat, lng], 15);
         }
 
@@ -261,7 +254,8 @@ const leafletHTML = `
 
 
         // Function to show map features
-        function updateMapFeatures(showExpressEast, showExpressWest, showHospitalExpress, showHospital, showInner, showOuter, showRailroad, showBikeShare) {
+        function updateMapFeatures(showExpressEast, showExpressWest, showHospitalExpress, 
+                                  showHospital, showInner, showOuter, showRailroad, showBikeShare) {
           // Clear existing layers
           if (expressEastPolyline) map.removeLayer(expressEastPolyline);
           if (expressWestPolyline) map.removeLayer(expressWestPolyline);
