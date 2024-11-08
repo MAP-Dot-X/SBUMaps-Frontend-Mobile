@@ -155,10 +155,10 @@ const leafletHTML = `
 
         var busRailroad = new L.Icon({ 
           iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png',
-          iconSize: [22, 37],
-          iconAnchor: [11, 37],
-          popupAnchor: [1, -30],
-          shadowSize: [40, 40]
+          iconSize: [26, 44],
+          iconAnchor: [13, 44],
+          popupAnchor: [1, -34],
+          shadowSize: [44, 44]
         });
 
         var busIcon = new L.Icon({ 
