@@ -75,10 +75,10 @@ const leafletHTML = `
 
         var innerStopIcon = new L.Icon({ 
           iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png', 
-          iconSize: [22, 37],
-          iconAnchor: [11, 37],
-          popupAnchor: [1, -30],
-          shadowSize: [40, 40]
+          iconSize: [18, 30],
+          iconAnchor: [9, 30],
+          popupAnchor: [1, -25],
+          shadowSize: [35, 35] 
         });
 
         var outerStopIcon = new L.Icon({ 
